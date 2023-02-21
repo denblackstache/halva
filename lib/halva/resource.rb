@@ -16,7 +16,7 @@ module Halva
     end
 
     def initialize(model)
-      @model = model
+      @model = model.freeze
       @embedded = []
       @links = []
     end
@@ -31,22 +31,28 @@ module Halva
       self
     end
 
-    def build
+    def to_h
+      document = @model.dup
       unless @embedded.empty?
-        @model[EMBEDDED_KEY] = {} unless @model.key?(EMBEDDED_KEY)
+        document[EMBEDDED_KEY] = {} unless document.key?(EMBEDDED_KEY)
         @embedded.each do |emb|
-          @model[EMBEDDED_KEY][emb[:relation]] = emb[:resource]
+          is_collection = emb[:resource].is_a?(Enumerable)
+          document[EMBEDDED_KEY][emb[:relation]] = if is_collection
+                                                     emb[:resource].map(&:to_h)
+                                                   else
+                                                     emb[:resource].to_h
+                                                   end
         end
       end
 
       unless @links.empty?
-        @model[LINKS_KEY] = {} unless @model.key?(LINKS_KEY)
+        document[LINKS_KEY] = {} unless document.key?(LINKS_KEY)
         @links.each do |link|
-          @model[LINKS_KEY][link.relation] = link.to_h
+          document[LINKS_KEY][link.relation] = link.to_h
         end
       end
 
-      @model.to_h
+      document
     end
   end
 end

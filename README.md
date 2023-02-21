@@ -33,10 +33,10 @@ require 'halva'
 
 order = Order.find(1)
 Halva::Resource.from_model(order)
-               .embed(Halva::Resource.from_model(order.customer).build, :customer)
+               .embed(Halva::Resource.from_model(order.customer), :customer)
                .link(Halva::Link.new('/orders/1', :self))
                .link(Halva::Link.new('/orders/1/customer', :customer))
-               .build
+               .to_h
 
 ```
 
@@ -47,11 +47,14 @@ require 'halva'
 
 orders = Order.find
 Halva::Resource.from_empty_model
-               .embed(orders.map { |order| Halva::Resource.from_model(order).build })
+               .embed(orders.map do |order|
+                 Halva::Resource.from_model(order)
+                                .link(Halva::Link.new("/orders/#{order.id}", :self))
+               end)
                .link(Halva::Link.new('/orders?page=3', :next))
                .link(Halva::Link.new('/orders?page=2', :self))
                .link(Halva::Link.new('/orders?page=1', :prev))
-               .build
+               .to_h
 
 ```
 
