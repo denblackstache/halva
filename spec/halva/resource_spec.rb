@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'halva/resource'
-require 'halva/link'
 require 'ostruct'
 require 'spec_helper'
 

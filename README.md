@@ -29,6 +29,8 @@ Or install it yourself as:
 ### Representing an object
 
 ```ruby
+require 'halva'
+
 order = Order.find(1)
 Halva::Resource.from_model(order)
                .embed(Halva::Resource.from_model(order.customer).build, :customer)
@@ -41,6 +43,8 @@ Halva::Resource.from_model(order)
 ### Representing a collection
 
 ```ruby
+require 'halva'
+
 orders = Order.find
 Halva::Resource.from_empty_model
                .embed(orders.map { |order| Halva::Resource.from_model(order).build })

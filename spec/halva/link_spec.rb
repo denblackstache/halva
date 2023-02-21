@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'halva/link'
 require 'spec_helper'
 
 RSpec.describe 'Halva::Link' do
