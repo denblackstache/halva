@@ -38,6 +38,20 @@ Halva::Resource.from_model(order)
                .link(Halva::Link.new('/orders/1/customer', :customer))
                .to_h
 
+# {
+#   :id => 1, 
+#   :name => "Order Example"
+#   :_embedded => {
+#     :customer => [{
+#       :id => 1, 
+#       :name => "Customer Example"
+#     }]
+#   }, 
+#   :_links => { 
+#     :self => {:href => "/orders/1"}, 
+#     :customer => {:href => "/orders/1/customer"} 
+#   }
+# }
 ```
 
 ### Representing a collection
@@ -51,10 +65,25 @@ Halva::Resource.from_empty_model
                  Halva::Resource.from_model(order)
                                 .link(Halva::Link.new("/orders/#{order.id}", :self))
                end)
-               .link(Halva::Link.new('/orders?page=3', :next))
                .link(Halva::Link.new('/orders?page=2', :self))
+               .link(Halva::Link.new('/orders?page=3', :next))
                .link(Halva::Link.new('/orders?page=1', :prev))
                .to_h
+
+# {
+#   :_embedded => {
+#     :item => [{
+#       :id => 1, 
+#       :name => "Example"
+#       :_links => {:self => {:href => "/orders/1"} }
+#     }]
+#   }, 
+#   :_links => { 
+#     :self => {:href => "/orders/1?page=2"}, 
+#     :next => {:href => "/orders/1?page=3"}, 
+#     :prev => {:href => "/orders/1?page=1"}
+#   }
+# }
 
 ```
 
