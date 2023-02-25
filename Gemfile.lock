@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    halva (0.3.0)
+    halva (0.4.0)
 
 GEM
   remote: https://rubygems.org/

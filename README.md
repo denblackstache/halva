@@ -1,12 +1,19 @@
 # Halva
 
-HAL-compliant serializer
+HAL-compliant decorator
 
 [![Ruby](https://github.com/denblackstache/halva/actions/workflows/main.yml/badge.svg)](https://github.com/denblackstache/halva/actions/workflows/main.yml) [![Gem Version](https://badge.fury.io/rb/halva.svg)](https://badge.fury.io/rb/halva)
 
-Links
+**Links**
 * [HAL - Hypertext Application Language](https://stateless.co/hal_specification.html)
 * [Specification Draft](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08)
+
+**Goals**
+
+* No DSL
+* HAL-compliant
+* Not responsible for the whole presentation layer
+* Simple, extensible, self-discoverable
 
 ## Installation
 
@@ -64,15 +71,16 @@ Halva::Resource.from_empty_model
                .embed(orders.map do |order|
                  Halva::Resource.from_model(order)
                                 .link(Halva::Link.new("/orders/#{order.id}", :self))
-               end)
+               end, :'acme:order')
                .link(Halva::Link.new('/orders?page=2', :self))
                .link(Halva::Link.new('/orders?page=3', :next))
                .link(Halva::Link.new('/orders?page=1', :prev))
+               .link(Halva::Curie.new('https://docs.acme.com/relations/{rel}', 'acme'))
                .to_h
 
 # {
 #   :_embedded => {
-#     :item => [{
+#     :"acme:order" => [{
 #       :id => 1, 
 #       :name => "Example"
 #       :_links => {:self => {:href => "/orders/1"} }
@@ -81,7 +89,12 @@ Halva::Resource.from_empty_model
 #   :_links => { 
 #     :self => {:href => "/orders/1?page=2"}, 
 #     :next => {:href => "/orders/1?page=3"}, 
-#     :prev => {:href => "/orders/1?page=1"}
+#     :prev => {:href => "/orders/1?page=1"},
+#     :curies => [{
+#       name: 'acme',
+#       href: 'https://docs.acme.com/relations/{rel}',
+#       templated: true
+#     }]
 #   }
 # }
 

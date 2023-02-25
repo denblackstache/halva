@@ -67,7 +67,36 @@ RSpec.describe 'Halva::Resource' do
                                   },
                                   _embedded: {
                                     item: [{
-                                      _links: { self: { href: '/orders/100' }},
+                                      _links: { self: { href: '/orders/100' } },
+                                      id: 100,
+                                      name: 'Example',
+                                      phone: '555-555-5555'
+                                    }]
+                                  }
+                                })
+    end
+  end
+
+  context 'when adding curies' do
+    it 'succeeds' do
+      represented = Halva::Resource.from_empty_model
+                                   .embed([Halva::Resource.from_model(order)
+                                                          .link(Halva::Link.new("/orders/#{order.id}", :self))], :'acme:order')
+                                   .link(Halva::Link.new('/orders?page=2', :self))
+                                   .link(Halva::Curie.new('https://docs.acme.com/relations/{rel}', 'acme'))
+                                   .to_h
+      expect(represented).to eq({
+                                  _links: {
+                                    self: { href: '/orders?page=2' },
+                                    curies: [{
+                                      name: 'acme',
+                                      href: 'https://docs.acme.com/relations/{rel}',
+                                      templated: true
+                                    }]
+                                  },
+                                  _embedded: {
+                                    'acme:order': [{
+                                      _links: { self: { href: '/orders/100' } },
                                       id: 100,
                                       name: 'Example',
                                       phone: '555-555-5555'

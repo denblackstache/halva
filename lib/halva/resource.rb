@@ -2,10 +2,11 @@
 
 module Halva
   # HAL Resource object
-  # https://datatracker.ietf.org/doc/html/draft-kelly-json-hal#section-4
+  # See [HAL Draft](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal#section-4)
   class Resource
     EMBEDDED_KEY = :_embedded
     LINKS_KEY = :_links
+    CURIES_KEY = :curies
 
     def self.from_model(model)
       new(model.to_h)
@@ -48,7 +49,12 @@ module Halva
       unless @links.empty?
         document[LINKS_KEY] = {} unless document.key?(LINKS_KEY)
         @links.each do |link|
-          document[LINKS_KEY][link.relation] = link.to_h
+          if link.relation == CURIES_KEY
+            document[LINKS_KEY][CURIES_KEY] = [] unless document[LINKS_KEY].key?(CURIES_KEY)
+            document[LINKS_KEY][CURIES_KEY] << link.to_h
+          else
+            document[LINKS_KEY][link.relation] = link.to_h
+          end
         end
       end
 

@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Denis Semenenko']
   spec.email         = ['hypercoderx@gmail.com']
 
-  spec.summary       = 'HAL-compliant serializer'
+  spec.summary       = 'HAL-compliant decorator'
   spec.homepage      = 'https://github.com/denblackstache/halva'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.7.0')
