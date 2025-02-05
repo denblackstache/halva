@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'halva'
   spec.version       = Halva::VERSION
   spec.authors       = ['Denis Semenenko']
-  spec.email         = ['hypercoderx@gmail.com']
+  spec.email         = ['den@densemenenko.com']
 
   spec.summary       = 'HAL-compliant decorator'
   spec.homepage      = 'https://github.com/denblackstache/halva'
